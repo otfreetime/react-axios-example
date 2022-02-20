@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import { useLazyAxios } from 'use-axios-client';
 
-function App() {
+export default function App() {
+  const [getData, { data, error, loading }] = useLazyAxios({
+    url: "https://jsonplaceholder.typicode.com/posts"
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {loading && <div>Loading...</div>}
+      {error && <div>{error.message}</div>}
+      {data && <div>
+        <ul>
+        {data.map (x => <li key={x.id}>{x.title}</li>)}
+        </ul>
+       
+        </div>
+        }
+      <button onClick={() => getData()}>Get data</button>
+    </>
   );
 }
-
-export default App;
